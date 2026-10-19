@@ -147,7 +147,7 @@ input[type="number"] { width: 84px; }
     { k: "born", label: "Wesley is here" },
     { k: "recovery", label: "Mom and baby" }
   ];
-  var entries = [], loaded = false;
+  var entries = [], loaded = false, failures = 0, retryTimer = null;
   var root = document.getElementById("root");
 
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -203,7 +203,7 @@ input[type="number"] { width: 84px; }
     var first = list[list.length - 1], last = list[0], born = null;
     for (var i = list.length - 1; i >= 0; i--) if (list[i].tag === "born") { born = list[i]; break; }
     var h = '<header class="mast"><span class="live"><i></i>Live updates</span><h1>' + esc(TITLE) + "</h1>";
-    if (!list.length) h += '<div class="summary">' + (loaded ? "Updates from the hospital will appear here." : "Loading updates…") + '</div>';
+    if (!list.length) h += '<div class="summary">' + (loaded ? "Updates from the hospital will appear here." : failures > 1 ? "Having trouble connecting. Trying again…" : "Loading updates…") + '</div>';
     else {
       h += '<div class="summary"><span>Latest <b>' + esc(timeOf(last)) + '</b> <span data-ago="' + esc(last.t) + '"></span></span>';
       if (born) h += "<span>Born <b>" + esc(fmt(born, { weekday: "short", hour: "numeric", minute: "2-digit" })) + "</b></span>";
@@ -213,7 +213,7 @@ input[type="number"] { width: 84px; }
     h += "</header>";
 
     if (!list.length && !loaded) {
-      h += '<div class="empty"><b>Loading updates…</b><span>One moment.</span></div>';
+      h += '<div class="empty"><b>' + (failures > 1 ? "Still connecting…" : "Loading updates…") + '</b><span>' + (failures > 1 ? "The page keeps trying on its own. Check your signal if this lasts." : "One moment.") + '</span></div>';
     } else if (!list.length) {
       h += '<div class="empty"><b>No updates yet</b><span>Check back here, or keep this page open. It checks for new updates on its own.</span></div>';
     } else {
@@ -289,7 +289,7 @@ input[type="number"] { width: 84px; }
     if (!force && (document.visibilityState !== "visible" || sheet)) return;
     call("getFeed").then(function (f) {
       var list = f.entries || [], s = sig(list), wasLoaded = loaded;
-      loaded = true;
+      loaded = true; failures = 0;
       ls("wkb-feed", JSON.stringify(list));
       if (s === lastSig && wasLoaded) return;
       var before = {}; entries.forEach(function (e) { before[e.id] = 1; });
@@ -301,7 +301,13 @@ input[type="number"] { width: 84px; }
       render();
       if (added.length && hadBaseline) showBanner(added);
     }, function () {
-      if (!loaded && !entries.length) { loaded = true; render(); }
+      // Google's feed sometimes fails on a cold start. Never show "No updates" for a failed load: retry soon.
+      failures++;
+      if (!loaded) {
+        if (!entries.length) render();
+        clearTimeout(retryTimer);
+        retryTimer = setTimeout(function () { refresh(true); }, Math.min(15000, 2000 * failures));
+      }
     });
   }
   setInterval(refresh, 40000);
