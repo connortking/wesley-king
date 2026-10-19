@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wesley King's Birth</title>
+<meta name="description" content="Live updates and photos from the hospital as Wesley King arrives.">
+<meta property="og:title" content="Wesley King's Birth">
+<meta property="og:description" content="Live updates and photos from the hospital.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://connortking.github.io/wesley-king/">
+<meta name="apple-mobile-web-app-title" content="Wesley">
+<meta name="theme-color" content="#f1f4f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e141a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%233d6c93'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='%23fff'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Hosted on GitHub Pages; data comes from the Apps Script feed (API below).
+   Layout: one narrow column, masthead, then a day-grouped timeline with times on the left rail; the poster gets a bottom bar and a sheet. */
+:root {
+  --bg: #f1f4f7; --surface: #ffffff; --ink: #18232f; --muted: #5b6977; --line: #d8e0e7;
+  --accent: #3d6c93; --accent-ink: #ffffff; --warm: #b8741f; --warm-bg: #fbf0e1; --danger: #b3412e;
+  --shadow: 0 1px 2px rgba(24,35,47,.06), 0 8px 24px rgba(24,35,47,.06);
+  --f-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --f-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e141a; --surface: #161f28; --ink: #e7edf2; --muted: #95a3b0; --line: #26323d;
+  --accent: #8ab4d6; --accent-ink: #0e141a; --warm: #e2a95c; --warm-bg: #2a2116; --danger: #ec8a77;
+  --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark; } }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--f-body); -webkit-text-size-adjust: 100%; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+#root { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-top: calc(28px + env(safe-area-inset-top, 0px)); padding-bottom: 120px; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+
+.mast { display: grid; gap: 10px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.live { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--warm); animation: pulse 2.4s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(184,116,31,.55); } 70%,100% { box-shadow: 0 0 0 10px rgba(184,116,31,0); } }
+h1 { font: 400 clamp(34px, 9vw, 52px)/1.04 var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.summary { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+.summary b { color: var(--ink); font-weight: 600; }
+
+.born { margin-top: 24px; background: var(--warm-bg); border-radius: 18px; overflow: hidden; display: grid; }
+.born img { width: 100%; max-height: 70vh; object-fit: cover; display: block; cursor: zoom-in; }
+.born .in { padding: 18px 20px 20px; display: grid; gap: 6px; }
+.born .kick { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--warm); }
+.born h2 { font: 400 30px/1.1 var(--f-display); margin: 0; text-wrap: balance; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 22px; font-variant-numeric: tabular-nums; }
+.stats div { display: grid; }
+.stats small { font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.stats strong { font-size: 20px; font-weight: 600; }
+
+.day { margin-top: 26px; }
+.day h3 { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.tl { list-style: none; margin: 0; padding: 0; }
+.ev { display: grid; grid-template-columns: 76px 1fr; gap: 0 14px; }
+.ev .when { padding-top: 14px; text-align: right; font-variant-numeric: tabular-nums; display: grid; align-content: start; }
+.ev .when b { font-weight: 600; font-size: 15px; white-space: nowrap; }
+.ev .when span { font-size: 12px; color: var(--muted); }
+.ev .body { min-width: 0; border-left: 2px solid var(--line); padding: 12px 0 18px 18px; position: relative; display: grid; gap: 8px; }
+.ev .body::before { content: ""; position: absolute; left: -7px; top: 20px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); }
+.ev.ms .body::before { background: var(--warm); border-color: var(--warm); }
+.tag { justify-self: start; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--warm); background: var(--warm-bg); padding: 3px 9px; border-radius: 99px; }
+.newpill { justify-self: start; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 99px; }
+.txt { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 17px; }
+.note { font-size: 12px; color: var(--muted); }
+.pics { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+.pics.one { grid-template-columns: 1fr; }
+.pics img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; display: block; background: var(--line); cursor: zoom-in; }
+.pics.one img { aspect-ratio: auto; max-height: 520px; }
+.edit { justify-self: start; border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 4px 12px; font-size: 13px; color: var(--muted); cursor: pointer; }
+
+.empty { margin-top: 28px; padding: 26px 20px; border: 1.5px dashed var(--line); border-radius: 16px; color: var(--muted); display: grid; gap: 6px; }
+.empty b { color: var(--ink); font-size: 17px; }
+.foot { margin-top: 34px; color: var(--muted); font-size: 13px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.link { border: 0; background: none; color: var(--muted); text-decoration: underline; font-size: 13px; cursor: pointer; padding: 6px; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: var(--bg); border-top: 1px solid var(--line); display: flex; justify-content: center; z-index: 5; }
+.btn { appearance: none; border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 600; font-size: 17px; cursor: pointer; background: var(--accent); color: var(--accent-ink); }
+.btn.sm { padding: 11px 16px; font-size: 16px; border-radius: 12px; }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn.danger { background: transparent; color: var(--danger); border: 1px solid var(--line); }
+.bar .btn { width: 100%; max-width: 608px; }
+
+.sheet { position: fixed; inset: 0; z-index: 10; background: rgba(10,16,22,.45); display: flex; align-items: flex-end; justify-content: center; }
+.panel { background: var(--surface); width: 100%; max-width: 640px; max-height: 94%; overflow: auto; border-radius: 20px 20px 0 0; padding: 18px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
+.panel header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.panel h2 { margin: 0; font: 400 24px/1.1 var(--f-display); }
+.x { border: 0; background: transparent; font-size: 15px; color: var(--muted); padding: 8px; cursor: pointer; }
+.lbl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 0 4px; scrollbar-width: none; }
+.chip { flex: none; border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 8px 13px; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--warm-bg); border-color: var(--warm); color: var(--warm); font-weight: 600; }
+textarea { width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--bg); font-size: 17px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
+.seg button { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; font-size: 15px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+input[type="datetime-local"], input[type="number"], input[type="password"] { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); font-size: 16px; min-width: 0; max-width: 100%; }
+input[type="number"] { width: 84px; }
+.field { display: grid; gap: 6px; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.thumb { position: relative; width: 76px; height: 76px; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.thumb button { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font-size: 15px; line-height: 1; cursor: pointer; }
+.addpic { width: 76px; height: 76px; border: 1.5px dashed var(--line); border-radius: 10px; display: grid; place-items: center; color: var(--muted); font-size: 13px; cursor: pointer; text-align: center; }
+.status { font-size: 14px; color: var(--muted); min-height: 1.4em; }
+.status.err { color: var(--danger); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.actions .primary { flex: 1; }
+
+.banner { position: fixed; left: 0; right: 0; top: 0; z-index: 8; padding: calc(10px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; justify-content: center; }
+.banner button { width: 100%; max-width: 608px; text-align: left; border: 0; border-radius: 14px; padding: 12px 16px; background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow); font-size: 15px; cursor: pointer; display: grid; gap: 2px; }
+.banner b { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.banner span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+.lb img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { .live i { animation: none; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function () {
+  "use strict";
+  // Google Apps Script data feed. credentials: "omit" keeps Google sign-ins out of it, which is
+  // what used to break the page for people signed in to two Google accounts.
+  var API = "https://script.google.com/macros/s/AKfycbyAgfSmiHYxGPcCSJOeFwdvxVn_7sDaYn24mgfU3PkUr9KRApRNsnrzYlJNvOA5QJNN2w/exec";
+  var TITLE = "Wesley King's Birth";
+  var TAGS = [
+    { k: "hospital", label: "Headed to the hospital" },
+    { k: "checkin", label: "Checked in" },
+    { k: "contractions", label: "Contractions" },
+    { k: "progress", label: "Progress check" },
+    { k: "epidural", label: "Epidural" },
+    { k: "water", label: "Water broke" },
+    { k: "pushing", label: "Pushing" },
+    { k: "born", label: "Wesley is here" },
+    { k: "recovery", label: "Mom and baby" }
+  ];
+  var entries = [], loaded = false;
+  var root = document.getElementById("root");
+
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    var req = fn === "getFeed"
+      ? fetch(API + "?api=feed&t=" + Date.now(), { credentials: "omit", cache: "no-store" })
+      : fetch(API, { method: "POST", credentials: "omit", body: JSON.stringify({ fn: fn, args: args }) });
+    return req.then(function (res) {
+      if (!res.ok) throw new Error("The server didn't answer (" + res.status + "). Check your signal and try again.");
+      return res.json();
+    }, function () { throw new Error("No connection. Check your signal and try again."); }).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.error) || "Something went wrong.");
+      return j.result;
+    });
+  }
+  function errText(e) { return (e && (e.message || String(e)) || "Something went wrong").replace(/^Exception:\s*/, "").replace(/^Error:\s*/, ""); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function tagLabel(k) { for (var i = 0; i < TAGS.length; i++) if (TAGS[i].k === k) return TAGS[i].label; return ""; }
+  function fmt(e, opts) {
+    try { return new Intl.DateTimeFormat("en-US", Object.assign({ timeZone: e.tz || undefined }, opts)).format(new Date(e.t)); }
+    catch (x) { return new Intl.DateTimeFormat("en-US", opts).format(new Date(e.t)); }
+  }
+  function timeOf(e) { return fmt(e, { hour: "numeric", minute: "2-digit" }); }
+  function dayOf(e) { return fmt(e, { weekday: "long", month: "long", day: "numeric" }); }
+  function zoneOf(e) {
+    try { var p = new Intl.DateTimeFormat("en-US", { timeZone: e.tz || undefined, timeZoneName: "short" }).formatToParts(new Date(e.t)); for (var i = 0; i < p.length; i++) if (p[i].type === "timeZoneName") return p[i].value; } catch (x) {}
+    return "";
+  }
+  function dur(ms) { var m = Math.max(0, Math.round(ms / 60000)), h = Math.floor(m / 60); m = m % 60; return h ? h + "h " + m + "m" : m + "m"; }
+  function sorted() { return entries.slice().sort(function (a, b) { return new Date(b.t) - new Date(a.t); }); }
+  function photo(id, w) { return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w" + (w || 1600); }
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) { if (k === "text") n.textContent = attrs[k]; else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]); else n.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+
+  try { var cached = JSON.parse(ls("wkb-feed") || "null"); if (Array.isArray(cached)) entries = cached; } catch (e) {}
+
+  /* ---------- New-since-last-visit tracking ---------- */
+  var seenRaw = ls("wkb-seen"), seen = {};
+  try { (JSON.parse(seenRaw || "[]") || []).forEach(function (id) { seen[id] = 1; }); } catch (e) {}
+  var fresh = {};
+  function computeFresh() { fresh = {}; if (seenRaw == null) return; entries.forEach(function (e) { if (!seen[e.id]) fresh[e.id] = 1; }); }
+  function markSeen() { entries.forEach(function (e) { seen[e.id] = 1; }); seenRaw = JSON.stringify(Object.keys(seen)); ls("wkb-seen", seenRaw); }
+  computeFresh();
+
+  /* ---------- Render ---------- */
+  function render() {
+    var list = sorted();
+    var first = list[list.length - 1], last = list[0], born = null;
+    for (var i = list.length - 1; i >= 0; i--) if (list[i].tag === "born") { born = list[i]; break; }
+    var h = '<header class="mast"><span class="live"><i></i>Live updates</span><h1>' + esc(TITLE) + "</h1>";
+    if (!list.length) h += '<div class="summary">' + (loaded ? "Updates from the hospital will appear here." : "Loading updates…") + '</div>';
+    else {
+      h += '<div class="summary"><span>Latest <b>' + esc(timeOf(last)) + '</b> <span data-ago="' + esc(last.t) + '"></span></span>';
+      if (born) h += "<span>Born <b>" + esc(fmt(born, { weekday: "short", hour: "numeric", minute: "2-digit" })) + "</b></span>";
+      else h += "<span>Since first update <b>" + esc(dur(new Date(last.t) - new Date(first.t))) + "</b></span>";
+      h += "<span>" + list.length + (list.length === 1 ? " update" : " updates") + "</span></div>";
+    }
+    h += "</header>";
+
+    if (!list.length && !loaded) {
+      h += '<div class="empty"><b>Loading updates…</b><span>One moment.</span></div>';
+    } else if (!list.length) {
+      h += '<div class="empty"><b>No updates yet</b><span>Check back here, or keep this page open. It checks for new updates on its own.</span></div>';
+    } else {
+      if (born) {
+        var bp = (born.photos || [])[0];
+        h += '<section class="born">' + (bp ? '<img src="' + esc(photo(bp, 1600)) + '" data-full="' + esc(photo(bp, 2400)) + '" alt="Wesley">' : "") + '<div class="in"><span class="kick">Welcome to the world</span><h2>Wesley was born ' + esc(dayOf(born)) + " at " + esc(timeOf(born)) + "</h2>";
+        var st = born.stats || {}, bits = [];
+        if (st.lb || st.oz) bits.push("<div><small>Weight</small><strong>" + esc((st.lb || 0) + " lb " + (st.oz || 0) + " oz") + "</strong></div>");
+        if (st.inch) bits.push("<div><small>Length</small><strong>" + esc(st.inch + " in") + "</strong></div>");
+        if (first !== born) bits.push("<div><small>After</small><strong>" + esc(dur(new Date(born.t) - new Date(first.t))) + "</strong></div>");
+        if (bits.length) h += '<div class="stats">' + bits.join("") + "</div>";
+        h += "</div></section>";
+      }
+      var curDay = null;
+      list.forEach(function (e) {
+        var d = dayOf(e);
+        if (d !== curDay) { if (curDay !== null) h += "</ol></section>"; curDay = d; h += '<section class="day"><h3>' + esc(d) + '</h3><ol class="tl">'; }
+        var since = e === first ? "Start" : "+" + dur(new Date(e.t) - new Date(first.t));
+        h += '<li class="ev' + (e.tag ? " ms" : "") + '" data-id="' + esc(e.id) + '"><div class="when"><b>' + esc(timeOf(e)) + "</b><span>" + esc(since) + '</span></div><div class="body">';
+        if (fresh[e.id]) h += '<span class="newpill">New</span>';
+        if (e.tag) h += '<span class="tag">' + esc(tagLabel(e.tag)) + "</span>";
+        if (e.text) h += '<div class="txt">' + esc(e.text) + "</div>";
+        var ps = e.photos || [];
+        if (ps.length) h += '<div class="pics' + (ps.length === 1 ? " one" : "") + '">' + ps.map(function (id) { return '<img src="' + esc(photo(id, ps.length === 1 ? 1600 : 600)) + '" data-full="' + esc(photo(id, 2400)) + '" alt="Photo" loading="lazy">'; }).join("") + "</div>";
+        if (e.tag === "born" && e.stats) h += '<div class="note">' + esc([e.stats.lb || e.stats.oz ? (e.stats.lb || 0) + " lb " + (e.stats.oz || 0) + " oz" : "", e.stats.inch ? e.stats.inch + " in" : ""].filter(Boolean).join(" · ")) + "</div>";
+        if (e.late) h += '<div class="note">Added later</div>';
+        if (pass) h += '<button type="button" class="edit" data-edit="' + esc(e.id) + '">Edit</button>';
+        h += "</div></li>";
+      });
+      if (curDay !== null) h += "</ol></section>";
+    }
+    var z = list.length ? zoneOf(list[0]) : "";
+    h += '<div class="foot"><span>This page checks for new updates on its own.' + (z ? " Times shown in " + esc(z) + "." : "") + "</span>" +
+      (pass ? '<button type="button" class="link" id="signout">Stop posting from this phone</button>' : '<button type="button" class="link" id="signin">Posting updates? Sign in</button>') + "</div>";
+
+    var y = window.scrollY;
+    root.innerHTML = h;
+    window.scrollTo(0, y);
+    wire();
+    tick();
+  }
+
+  function wire() {
+    var si = document.getElementById("signin"); if (si) si.addEventListener("click", openSignin);
+    var so = document.getElementById("signout"); if (so) so.addEventListener("click", function () { pass = null; ls("wkb-pass", null); bar.hidden = true; render(); });
+  }
+
+  function tick() {
+    var now = Date.now();
+    root.querySelectorAll("[data-ago]").forEach(function (n) {
+      var m = Math.round((now - new Date(n.getAttribute("data-ago"))) / 60000);
+      n.textContent = m < 1 ? "(just now)" : "(" + (m < 60 ? m + " min" : dur(m * 60000)) + " ago)";
+    });
+  }
+  setInterval(tick, 30000);
+
+  root.addEventListener("click", function (ev) {
+    var ed = ev.target.closest && ev.target.closest("[data-edit]");
+    if (ed) { openSheet(ed.getAttribute("data-edit")); return; }
+    var img = ev.target.closest && ev.target.closest(".pics img, .born img");
+    if (!img) return;
+    var lb = el("div", { "class": "lb", role: "dialog", "aria-label": "Photo" }, [el("img", { src: img.getAttribute("data-full") || img.src, alt: "Photo" })]);
+    function close() { lb.remove(); document.removeEventListener("keydown", onKey); }
+    function onKey(k) { if (k.key === "Escape") close(); }
+    lb.addEventListener("click", close); document.addEventListener("keydown", onKey);
+    document.body.appendChild(lb);
+  });
+
+  /* ---------- Live refresh ---------- */
+  function sig(list) { return JSON.stringify(list.map(function (e) { return [e.id, e.t, e.text, e.tag, (e.photos || []).join(","), JSON.stringify(e.stats || null)]; })); }
+  var lastSig = sig(entries);
+  function refresh(force) {
+    if (!force && (document.visibilityState !== "visible" || sheet)) return;
+    call("getFeed").then(function (f) {
+      var list = f.entries || [], s = sig(list), wasLoaded = loaded;
+      loaded = true;
+      ls("wkb-feed", JSON.stringify(list));
+      if (s === lastSig && wasLoaded) return;
+      var before = {}; entries.forEach(function (e) { before[e.id] = 1; });
+      var hadBaseline = wasLoaded || entries.length > 0;
+      entries = list; lastSig = s;
+      if (seenRaw == null) markSeen();
+      var added = sorted().filter(function (e) { return !before[e.id]; });
+      computeFresh();
+      render();
+      if (added.length && hadBaseline) showBanner(added);
+    }, function () {
+      if (!loaded && !entries.length) { loaded = true; render(); }
+    });
+  }
+  setInterval(refresh, 40000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refresh(); else markSeen(); });
+  window.addEventListener("pagehide", markSeen);
+
+  function showBanner(added) {
+    var old = document.querySelector(".banner"); if (old) old.remove();
+    var top = added[0];
+    var b = el("div", { "class": "banner" }, [el("button", { type: "button" }, [
+      el("b", { text: added.length === 1 ? "New update · " + timeOf(top) : added.length + " new updates" }),
+      el("span", { text: top.text || tagLabel(top.tag) || "New photo" })
+    ])]);
+    b.firstChild.addEventListener("click", function () {
+      b.remove();
+      var li = root.querySelector('.ev[data-id="' + top.id + '"]');
+      if (li) li.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    document.body.appendChild(b);
+    setTimeout(function () { if (b.parentNode) b.remove(); }, 15000);
+  }
+
+  /* ---------- Posting ---------- */
+  var pass = ls("wkb-pass");
+  var bar = el("div", { "class": "bar" }, [el("button", { type: "button", "class": "btn", text: "+ Post an update", onclick: function () { openSheet(null); } })]);
+  bar.hidden = !pass;
+  document.body.appendChild(bar);
+  var sheet = null;
+
+  function sheetShell(titleText, kids) {
+    if (sheet) sheet.remove();
+    var closeBtn = el("button", { type: "button", "class": "x", text: "Close" });
+    var panel = el("div", { "class": "panel", role: "dialog", "aria-modal": "true", "aria-label": titleText }, [el("header", {}, [el("h2", { text: titleText }), closeBtn])].concat(kids));
+    sheet = el("div", { "class": "sheet" }, [panel]);
+    function close() { if (sheet) { sheet.remove(); sheet = null; } }
+    closeBtn.addEventListener("click", close);
+    sheet.addEventListener("click", function (e) { if (e.target === sheet) close(); });
+    document.body.appendChild(sheet);
+    return close;
+  }
+
+  function openSignin() {
+    var input = el("input", { type: "password", id: "pass", autocomplete: "current-password", "aria-label": "Passcode", placeholder: "Passcode" });
+    var status = el("div", { "class": "status", role: "status" });
+    var go = el("button", { type: "button", "class": "btn primary", text: "Sign in" });
+    var close = sheetShell("Sign in to post", [el("p", { "class": "note", text: "Only the family has this passcode. This phone stays signed in." }), input, status, el("div", { "class": "actions" }, [go])]);
+    function submit() {
+      go.disabled = true; status.className = "status"; status.textContent = "Checking…";
+      call("checkPass", input.value).then(function (r) {
+        pass = input.value; ls("wkb-pass", pass); bar.hidden = false; close(); render();
+      }, function (e) { go.disabled = false; status.className = "status err"; status.textContent = errText(e); });
+    }
+    go.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
+    setTimeout(function () { input.focus(); }, 50);
+  }
+
+  function localInput(d) { var z = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 16); }
+
+  function shrink(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), im = new Image();
+      im.onload = function () {
+        var s = Math.min(1, 1800 / Math.max(im.naturalWidth, im.naturalHeight));
+        var c = document.createElement("canvas");
+        c.width = Math.round(im.naturalWidth * s); c.height = Math.round(im.naturalHeight * s);
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg", 0.82));
+      };
+      im.onerror = function () { URL.revokeObjectURL(url); reject(new Error("That photo couldn't be read. Try a different one.")); };
+      im.src = url;
+    });
+  }
+
+  function openSheet(editId) {
+    var existing = editId ? entries.filter(function (x) { return x.id === editId; })[0] : null;
+    if (editId && !existing) return;
+    var editing = !!existing;
+    var d = existing ? {
+      tag: existing.tag || "", text: existing.text || "", photos: (existing.photos || []).map(function (id) { return { id: id }; }),
+      when: "at", at: localInput(new Date(existing.t)),
+      lb: (existing.stats && existing.stats.lb) || "", oz: (existing.stats && existing.stats.oz) || "", inch: (existing.stats && existing.stats.inch) || ""
+    } : { tag: "", text: ls("wkb-draft") || "", photos: [], when: "now", at: localInput(new Date()), lb: "", oz: "", inch: "" };
+
+    var status = el("div", { "class": "status", role: "status" });
+    var ta = el("textarea", { id: "upd-text", placeholder: "What's happening?", "aria-label": "Update" });
+    ta.value = d.text;
+    ta.addEventListener("input", function () { d.text = ta.value; if (!editing) ls("wkb-draft", ta.value); });
+
+    function num(id, label, key, step) {
+      var i = el("input", { id: id, type: "number", inputmode: "decimal", min: "0", step: step });
+      i.value = d[key]; i.addEventListener("input", function () { d[key] = i.value; });
+      return el("label", { "class": "field" }, [el("span", { "class": "lbl", text: label }), i]);
+    }
+    var statsWrap = el("div", { "class": "row" }, [num("st-lb", "Pounds", "lb", "1"), num("st-oz", "Ounces", "oz", "0.1"), num("st-in", "Inches", "inch", "0.25")]);
+    statsWrap.hidden = d.tag !== "born";
+
+    var chips = el("div", { "class": "chips", role: "group", "aria-label": "Milestone" });
+    TAGS.forEach(function (t) {
+      var c = el("button", { type: "button", "class": "chip", "aria-pressed": String(d.tag === t.k), text: t.label });
+      c.addEventListener("click", function () {
+        d.tag = d.tag === t.k ? "" : t.k;
+        chips.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b === c && !!d.tag)); });
+        statsWrap.hidden = d.tag !== "born";
+      });
+      chips.appendChild(c);
+    });
+
+    var thumbs = el("div", { "class": "thumbs" });
+    var fileIn = el("input", { type: "file", accept: "image/*", multiple: "", id: "upd-photos", hidden: "" });
+    function drawThumbs() {
+      thumbs.innerHTML = "";
+      d.photos.forEach(function (p, idx) {
+        var rm = el("button", { type: "button", "aria-label": "Remove photo", text: "×" });
+        rm.addEventListener("click", function () { d.photos.splice(idx, 1); drawThumbs(); });
+        thumbs.appendChild(el("div", { "class": "thumb" }, [el("img", { src: p.preview || photo(p.id, 200), alt: "" }), rm]));
+      });
+      thumbs.appendChild(el("label", { "class": "addpic", "for": "upd-photos", text: "+ Photo" }));
+    }
+    fileIn.addEventListener("change", function () {
+      Array.prototype.forEach.call(fileIn.files || [], function (f) { d.photos.push({ file: f, preview: URL.createObjectURL(f) }); });
+      fileIn.value = ""; drawThumbs();
+    });
+    drawThumbs();
+
+    var atIn = el("input", { type: "datetime-local", id: "upd-at", "aria-label": "Time of event" });
+    atIn.value = d.at;
+    atIn.addEventListener("input", function () { d.at = atIn.value; });
+    var segNow = el("button", { type: "button", "aria-pressed": String(d.when === "now"), text: "Right now" });
+    var segAt = el("button", { type: "button", "aria-pressed": String(d.when === "at"), text: editing ? "Time" : "Earlier time" });
+    function setWhen(w) {
+      d.when = w; segNow.setAttribute("aria-pressed", String(w === "now")); segAt.setAttribute("aria-pressed", String(w === "at")); atIn.hidden = w !== "at";
+    }
+    segNow.addEventListener("click", function () { setWhen("now"); });
+    segAt.addEventListener("click", function () { if (!atIn.value) atIn.value = d.at = localInput(new Date()); setWhen("at"); });
+    atIn.hidden = d.when !== "at";
+    if (editing) segNow.hidden = true;
+
+    var post = el("button", { type: "button", "class": "btn primary", text: editing ? "Save changes" : "Post update" });
+    var del = null, armed = false;
+    function busy(on, msg) { post.disabled = on; if (del) del.disabled = on; status.className = "status"; status.textContent = msg || ""; }
+    function fail(msg) { busy(false); status.className = "status err"; status.textContent = msg; }
+    function afterSave(fresh) {
+      return call("getFeed").then(function (f) { entries = f.entries || []; loaded = true; ls("wkb-feed", JSON.stringify(entries)); lastSig = sig(entries); markSeen(); computeFresh(); }, function () {}).then(function () { close(); render(); });
+    }
+    if (editing) {
+      del = el("button", { type: "button", "class": "btn danger", text: "Delete" });
+      del.addEventListener("click", function () {
+        if (!armed) { armed = true; del.textContent = "Tap again to delete"; return; }
+        busy(true, "Deleting…");
+        call("deletePost", pass, existing.id).then(afterSave, function (e) { fail("Couldn't delete. " + errText(e)); });
+      });
+    }
+
+    post.addEventListener("click", function () {
+      if (!d.text.trim() && !d.photos.length && !d.tag) { fail("Add a few words, a milestone, or a photo."); return; }
+      var when = d.when === "at" && atIn.value ? new Date(atIn.value) : new Date();
+      if (isNaN(when)) { fail("That time doesn't look right."); return; }
+      busy(true, "Preparing…");
+      var pending = d.photos.filter(function (p) { return p.file; }), n = 0, chain = Promise.resolve();
+      pending.forEach(function (p) {
+        chain = chain.then(function () {
+          n++; status.textContent = "Uploading photo " + n + " of " + pending.length + "…";
+          return shrink(p.file).then(function (dataUrl) { return call("uploadPhoto", pass, dataUrl); }).then(function (id) { p.id = id; delete p.file; });
+        });
+      });
+      chain.then(function () {
+        var tz; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (x) {}
+        var entry = {
+          id: existing ? existing.id : "",
+          t: when.toISOString(), tz: existing ? existing.tz : tz || "",
+          text: d.text.trim(), tag: d.tag,
+          photos: d.photos.filter(function (p) { return p.id; }).map(function (p) { return p.id; }),
+          late: existing ? !!existing.late : (d.when === "at" && Date.now() - when.getTime() > 5 * 60000),
+          stats: d.tag === "born" ? { lb: d.lb, oz: d.oz, inch: d.inch } : null
+        };
+        status.textContent = editing ? "Saving…" : "Posting…";
+        return call("savePost", pass, entry);
+      }).then(function (r) {
+        if (!r) return;
+        if (!editing) ls("wkb-draft", null);
+        status.textContent = editing ? "Saved." : "Posted.";
+        return new Promise(function (res) { setTimeout(res, 300); }).then(afterSave);
+      }).catch(function (e) {
+        var t = errText(e);
+        if (/passcode/i.test(t)) { pass = null; ls("wkb-pass", null); bar.hidden = true; }
+        fail("Couldn't post. " + t);
+      });
+    });
+
+    var close = sheetShell(editing ? "Edit update" : "New update", [
+      el("div", { "class": "field" }, [el("span", { "class": "lbl", text: "Milestone (optional)" }), chips]),
+      statsWrap,
+      ta,
+      el("div", { "class": "field" }, [el("span", { "class": "lbl", text: "Photos" }), thumbs, fileIn]),
+      el("div", { "class": "field" }, [el("span", { "class": "lbl", text: "When" }), el("div", { "class": "row" }, [el("div", { "class": "seg" }, [segNow, segAt]), atIn])]),
+      status,
+      el("div", { "class": "actions" }, [post, del])
+    ]);
+    if (!editing && !d.text) setTimeout(function () { ta.focus(); }, 50);
+  }
+
+  render();
+  refresh(true);
+})();
+</script>
+</body>
+</html>
